@@ -203,6 +203,9 @@ class Frequency_Spectrum:
             self.spectrum, win_len=win_len, fmin=self.fmin,
             fmax=self.fmax, lin_space=not log_scale, **kwargs,
         )
+        fig = None
+        ax  = None
+        
         if show_fig:
             fig = plt.figure()
             ax = plt.axes()
