@@ -1,15 +1,14 @@
-import unittest
-import numpy as np
-import scipy as sp
-import matplotlib.pyplot as plt
-
-from PySeismoSoil.class_ground_motion import Ground_Motion as GM
-from PySeismoSoil.class_Vs_profile import Vs_Profile
-from PySeismoSoil.class_frequency_spectrum import Frequency_Spectrum
-
 import os
+import unittest
 from os.path import join as _join
 
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy as sp
+
+from PySeismoSoil.class_frequency_spectrum import Frequency_Spectrum
+from PySeismoSoil.class_ground_motion import Ground_Motion as GM
+from PySeismoSoil.class_Vs_profile import Vs_Profile
 
 f_dir = _join(os.path.dirname(os.path.realpath(__file__)), 'files')
 
@@ -20,8 +19,8 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         gm = GM(_join(f_dir, 'sample_accel.txt'), unit='gal')
 
         PGA_benchmark = 294.30  # unit: cm/s/s
-        PGV_benchmark = 31.46   # unit: cm/s
-        PGD_benchmark = 38.77   # unit: cm
+        PGV_benchmark = 31.46  # unit: cm/s
+        PGD_benchmark = 38.77  # unit: cm
         tol = 1e-2
 
         self.assertAlmostEqual(gm.pga_in_gal, PGA_benchmark, delta=tol)
@@ -55,50 +54,62 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         # Test invalid unit names
         with self.assertRaisesRegex(ValueError, 'Invalid `unit` name.'):
             GM(np.array([1, 2, 3, 4, 5]), unit='test', dt=0.1)
-        with self.assertRaisesRegex(ValueError, r"use '/s/s' instead of 's\^2'"):
+
+        with self.assertRaisesRegex(
+            ValueError, r"use '/s/s' instead of 's\^2'"
+        ):
             GM(np.array([1, 2, 3, 4, 5]), unit='m/s^2', dt=0.1)
 
     def test_differentiation(self):
-        veloc = np.array([[.1, .2, .3, .4, .5, .6], [1, 3, 7, -1, -3, 5]]).T
+        veloc = np.array(
+            [[0.1, 0.2, 0.3, 0.4, 0.5, 0.6], [1, 3, 7, -1, -3, 5]]
+        ).T
         gm = GM(veloc, unit='m', motion_type='veloc')
         accel_benchmark = np.array(
-            [[.1, .2, .3, .4, .5, .6],
-             [0, 20, 40, -80, -20, 80]]
+            [[0.1, 0.2, 0.3, 0.4, 0.5, 0.6], [0, 20, 40, -80, -20, 80]],
         ).T
         self.assertTrue(np.allclose(gm.accel, accel_benchmark))
 
     def test_integration__artificial_example(self):
         gm = GM(_join(f_dir, 'two_column_data_example.txt'), unit='m/s/s')
-        v_bench = np.array([[0.1000, 0.1000],  # from MATLAB
-                            [0.2000, 0.3000],
-                            [0.3000, 0.6000],
-                            [0.4000, 1.0000],
-                            [0.5000, 1.5000],
-                            [0.6000, 1.7000],
-                            [0.7000, 2.0000],
-                            [0.8000, 2.4000],
-                            [0.9000, 2.9000],
-                            [1.0000, 3.5000],
-                            [1.1000, 3.8000],
-                            [1.2000, 4.2000],
-                            [1.3000, 4.7000],
-                            [1.4000, 5.3000],
-                            [1.5000, 6.0000]])
-        u_bench = np.array([[0.1000, 0.0100],  # from MATLAB
-                            [0.2000, 0.0400],
-                            [0.3000, 0.1000],
-                            [0.4000, 0.2000],
-                            [0.5000, 0.3500],
-                            [0.6000, 0.5200],
-                            [0.7000, 0.7200],
-                            [0.8000, 0.9600],
-                            [0.9000, 1.2500],
-                            [1.0000, 1.6000],
-                            [1.1000, 1.9800],
-                            [1.2000, 2.4000],
-                            [1.3000, 2.8700],
-                            [1.4000, 3.4000],
-                            [1.5000, 4.0000]])
+        v_bench = np.array(
+            [
+                [0.1000, 0.1000],  # from MATLAB
+                [0.2000, 0.3000],
+                [0.3000, 0.6000],
+                [0.4000, 1.0000],
+                [0.5000, 1.5000],
+                [0.6000, 1.7000],
+                [0.7000, 2.0000],
+                [0.8000, 2.4000],
+                [0.9000, 2.9000],
+                [1.0000, 3.5000],
+                [1.1000, 3.8000],
+                [1.2000, 4.2000],
+                [1.3000, 4.7000],
+                [1.4000, 5.3000],
+                [1.5000, 6.0000],
+            ],
+        )
+        u_bench = np.array(
+            [
+                [0.1000, 0.0100],  # from MATLAB
+                [0.2000, 0.0400],
+                [0.3000, 0.1000],
+                [0.4000, 0.2000],
+                [0.5000, 0.3500],
+                [0.6000, 0.5200],
+                [0.7000, 0.7200],
+                [0.8000, 0.9600],
+                [0.9000, 1.2500],
+                [1.0000, 1.6000],
+                [1.1000, 1.9800],
+                [1.2000, 2.4000],
+                [1.3000, 2.8700],
+                [1.4000, 3.4000],
+                [1.5000, 4.0000],
+            ],
+        )
         self.assertTrue(np.allclose(gm.veloc, v_bench))
         self.assertTrue(np.allclose(gm.displ, u_bench))
 
@@ -111,7 +122,9 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         veloc_ = np.genfromtxt(_join(f_dir, 'sample_accel.txt'))
         gm = GM(veloc_, unit='m/s', motion_type='veloc')
         displ = gm.displ[:, 1]
-        displ_cumtrapz = np.append(0, sp.integrate.cumtrapz(veloc_[:, 1], dx=gm.dt))
+        displ_cumtrapz = np.append(
+            0, sp.integrate.cumtrapz(veloc_[:, 1], dx=gm.dt)
+        )
         r = np.corrcoef(displ_cumtrapz, displ)[1, 1]  # cross-correlation
         self.assertTrue(r >= 0.999)
 
@@ -120,12 +133,24 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         freq, spec = gm.get_Fourier_spectrum(real_val=False).raw_data.T
 
         freq_bench = [
-            0.6667, 1.3333, 2.0000, 2.6667, 3.3333, 4.0000, 4.6667, 5.3333,
+            0.6667,
+            1.3333,
+            2.0000,
+            2.6667,
+            3.3333,
+            4.0000,
+            4.6667,
+            5.3333,
         ]
         FS_bench = [
-            60.0000 +  0.0000j, -1.5000 + 7.0569j, -1.5000 + 3.3691j,
-            -7.5000 + 10.3229j, -1.5000 + 1.3506j, -1.5000 + 0.8660j,
-            -7.5000 +  2.4369j, -1.5000 + 0.1577j,
+            60.0000 + 0.0000j,
+            -1.5000 + 7.0569j,
+            -1.5000 + 3.3691j,
+            -7.5000 + 10.3229j,
+            -1.5000 + 1.3506j,
+            -1.5000 + 0.8660j,
+            -7.5000 + 2.4369j,
+            -1.5000 + 0.1577j,
         ]
         self.assertTrue(np.allclose(freq, freq_bench, atol=0.0001, rtol=0.0))
         self.assertTrue(np.allclose(spec, FS_bench, atol=0.0001, rtol=0.0))
@@ -169,11 +194,17 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         for boundary in ['elastic', 'rigid']:
             deconv_motion = gm.deconvolve(vs_prof, boundary=boundary)
             output_motion = deconv_motion.amplify(vs_prof, boundary=boundary)
-            self.assertTrue(self.nearly_identical(gm.accel, output_motion.accel))
+            self.assertTrue(
+                self.nearly_identical(gm.accel, output_motion.accel)
+            )
 
             amplified_motion = gm.amplify(vs_prof, boundary=boundary)
-            output_motion = amplified_motion.deconvolve(vs_prof, boundary=boundary)
-            self.assertTrue(self.nearly_identical(gm.accel, output_motion.accel))
+            output_motion = amplified_motion.deconvolve(
+                vs_prof, boundary=boundary
+            )
+            self.assertTrue(
+                self.nearly_identical(gm.accel, output_motion.accel)
+            )
 
     def test_plot(self):
         filename = _join(f_dir, 'sample_accel.txt')
@@ -204,8 +235,12 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         gm = GM(data, unit='g', dt=0.1)
         gm_scaled_1 = gm.scale_motion(factor=2.0)  # scale by 2.0
         gm_scaled_2 = gm.scale_motion(target_PGA_in_g=5.0)  # scale by 0.5
-        self.assertTrue(np.allclose(gm.accel[:, 1] * 2, gm_scaled_1.accel[:, 1]))
-        self.assertTrue(np.allclose(gm.accel[:, 1] * 0.5, gm_scaled_2.accel[:, 1]))
+        self.assertTrue(
+            np.allclose(gm.accel[:, 1] * 2, gm_scaled_1.accel[:, 1])
+        )
+        self.assertTrue(
+            np.allclose(gm.accel[:, 1] * 0.5, gm_scaled_2.accel[:, 1])
+        )
 
     def test_amplify_by_tf__case_1_an_artificial_transfer_function(self):
         gm = GM(_join(f_dir, 'sample_accel.txt'), unit='gal')
@@ -213,7 +248,7 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         freq = np.arange(0.01, 50, step=0.01)
         tf = ratio_benchmark * np.ones_like(freq)
         transfer_function = Frequency_Spectrum(np.column_stack((freq, tf)))
-        new_gm = gm.amplify_by_tf(transfer_function, show_fig=False)
+        new_gm = gm.amplify_by_tf(transfer_function, show_fig=False)[0]
         ratio = new_gm.accel[:, 1] / gm.accel[:, 1]
         self.assertTrue(np.allclose(ratio, ratio_benchmark))
 
@@ -221,8 +256,8 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         gm = GM(_join(f_dir, 'sample_accel.txt'), unit='gal')
         vs_prof = Vs_Profile(_join(f_dir, 'profile_FKSH14.txt'))
         tf_RO, tf_BH, _ = vs_prof.get_transfer_function()
-        gm_with_tf_RO = gm.amplify_by_tf(tf_RO)
-        gm_with_tf_BH = gm.amplify_by_tf(tf_BH)
+        gm_with_tf_RO = gm.amplify_by_tf(tf_RO)[0]
+        gm_with_tf_BH = gm.amplify_by_tf(tf_BH)[0]
 
         gm_with_tf_RO_ = gm.amplify(vs_prof, boundary='elastic')
         gm_with_tf_BH_ = gm.amplify(vs_prof, boundary='rigid')
@@ -230,10 +265,10 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         # Assert that `amplify_by_tf()` and `amplify()` can generate
         # nearly identical results
         self.assertTrue(
-            self.nearly_identical(gm_with_tf_RO.accel, gm_with_tf_RO_.accel)
+            self.nearly_identical(gm_with_tf_RO.accel, gm_with_tf_RO_.accel),
         )
         self.assertTrue(
-            self.nearly_identical(gm_with_tf_BH.accel, gm_with_tf_BH_.accel)
+            self.nearly_identical(gm_with_tf_BH.accel, gm_with_tf_BH_.accel),
         )
 
     @staticmethod
@@ -257,7 +292,9 @@ class Test_Class_Ground_Motion(unittest.TestCase):
         result : bool
             Whether the motions are nearly identical
         """
-        if not np.allclose(motion_1[:, 0], motion_2[:, 0], rtol=0.001, atol=0.0):
+        if not np.allclose(
+            motion_1[:, 0], motion_2[:, 0], rtol=0.001, atol=0.0
+        ):
             return False
 
         r = np.corrcoef(motion_1[:, 1], motion_2[:, 1])
@@ -268,5 +305,7 @@ class Test_Class_Ground_Motion(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    SUITE = unittest.TestLoader().loadTestsFromTestCase(Test_Class_Ground_Motion)
+    SUITE = unittest.TestLoader().loadTestsFromTestCase(
+        Test_Class_Ground_Motion
+    )
     unittest.TextTestRunner(verbosity=2).run(SUITE)

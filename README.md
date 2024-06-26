@@ -1,7 +1,12 @@
 # PySeismoSoil
 
-PySeismoSoil is a Python library for performing 1D seismic site response analysis.
+[![PyPI](https://img.shields.io/pypi/v/pyseismosoil)](https://pypi.org/project/PySeismoSoil/)
+[![Documentation Status](https://readthedocs.org/projects/pyseismosoil/badge/?version=stable)](https://pyseismosoil.readthedocs.io/en/stable/?badge=stable)
+[![Downloads](https://static.pepy.tech/badge/pyseismosoil)](https://pepy.tech/project/pyseismosoil)
+[![Downloads](https://static.pepy.tech/badge/pyseismosoil/month)](https://pepy.tech/project/pyseismosoil)
+[![Downloads](https://static.pepy.tech/badge/pyseismosoil/week)](https://pepy.tech/project/pyseismosoil)
 
+PySeismoSoil is a Python library for performing 1D seismic site response analysis.
 
 ## Copyright and license
 
@@ -9,11 +14,9 @@ Copyright (c) 2019, California Institute of Technology, based on research suppor
 
 Please carefully read the license [here](https://github.com/jsh9/PySeismoSoil/blob/master/LICENSE) for the terms and conditions of using this library.
 
-
 ## Authors
 
 The authors of this library are the current and past members of the [Geoquake Research Group](http://asimaki.caltech.edu/) of the [California Institute of Technology](https://www.caltech.edu/): Jian Shi, Domniki Asimaki, and Wei Li.
-
 
 ## Installation
 
@@ -23,32 +26,26 @@ Install most recent stable version:
 pip install PySeismoSoil
 ```
 
-Or, install with latest changes (may contain features ahead of the stable version):
+If you already have an older version installed and want to upgrade to the newest version, use `pip install --upgrade PySeismoSoil`.
 
-```bash
-pip install git+https://github.com/jsh9/PySeismoSoil
-```
+## Supported Python versions
 
+PySeismoSoil currently support these Python versions:
 
-## Dependencies
+- 3.8
+- 3.9
+- 3.10
+- 3.11
 
-* Python: 3.6+
-* matplotlib: 2.0.0+
-* numpy: 1.11.0+
-* scipy: 1.1.0+
-* numba: 0.38.0+
-
+(Python 3.12 is not fully supported yet.)
 
 ## API Documentation
 
-Stable version: https://pyseismosoil.readthedocs.io/en/stable/
-
-(With latest features: https://pyseismosoil.readthedocs.io/en/latest/)
+https://caltech-geoquake.github.io/PySeismoSoil/
 
 ## Examples
 
 Go to the "examples" folder from the root directory. Those examples help you quickly get familiar with the usage of this library.
-
 
 ## Knowledge base
 
@@ -63,7 +60,6 @@ The models and algorithms used in this library mainly come from these research p
 4. W. Li, D. Assimaki (2010) "Site- and motion-dependent parametric uncertainty of site-response analyses in earthquake simulations." _Bulletin of the Seismological Society of America_, 100 (3), 954-968. [[URL](http://resolver.caltech.edu/CaltechAUTHORS:20140904-160952252)]
 
 5. D. Asimaki, W. Li, J. Steidl, J. Schmedes (2008) "Quantifying nonlinearity susceptibility via site-response modeling uncertainty at three sites in the Los Angeles Basin." _Bulletin of the Seismological Society of America_, 98 (5), 2364-2390. [[URL](http://resolver.caltech.edu/CaltechAUTHORS:20140828-163417572)]
-
 
 ## Report issues
 

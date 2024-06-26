@@ -36,7 +36,9 @@ class Test_Class_SVM(unittest.TestCase):
 
     def test_get_discretized_profile__fixed_thk(self):
         svm = SVM(target_Vs30=256, z1=100, show_fig=False)
-        discr_profile = svm.get_discretized_profile(fixed_thk=10, show_fig=False)
+        discr_profile = svm.get_discretized_profile(
+            fixed_thk=10, show_fig=False
+        )
         self.assertTrue(isinstance(discr_profile, Vs_Profile))
         if svm.has_bedrock_Vs:  # bedrock Vs must match
             self.assertEqual(svm.bedrock_Vs, discr_profile.vs_profile[-1, 1])
@@ -44,7 +46,9 @@ class Test_Class_SVM(unittest.TestCase):
 
     def test_get_discretized_profile__valid_Vs_increment(self):
         svm = SVM(target_Vs30=256, z1=100, show_fig=False)
-        discr_profile = svm.get_discretized_profile(Vs_increment=100, show_fig=False)
+        discr_profile = svm.get_discretized_profile(
+            Vs_increment=100, show_fig=False
+        )
         self.assertTrue(isinstance(discr_profile, Vs_Profile))
         if svm.has_bedrock_Vs:  # bedrock Vs must match
             self.assertEqual(svm.bedrock_Vs, discr_profile.vs_profile[-1, 1])
@@ -52,7 +56,9 @@ class Test_Class_SVM(unittest.TestCase):
 
     def test_get_discretized_profile__invalid_Vs_increment(self):
         svm = SVM(target_Vs30=256, z1=100, show_fig=False)
-        with self.assertRaisesRegex(ValueError, 'max Vs of the smooth profile'):
+        with self.assertRaisesRegex(
+            ValueError, 'max Vs of the smooth profile'
+        ):
             svm.get_discretized_profile(Vs_increment=5000)
 
     def test_get_discretized_profile__both_input_param_are_None(self):
@@ -76,7 +82,9 @@ class Test_Class_SVM(unittest.TestCase):
 
         # Use iteration to pick compliant randomized Vs profile
         random_profile = svm.get_randomized_profile(
-            show_fig=True, vs30_z1_compliance=True, verbose=True,
+            show_fig=True,
+            vs30_z1_compliance=True,
+            verbose=True,
         )
 
     def test_index_closest(self):
