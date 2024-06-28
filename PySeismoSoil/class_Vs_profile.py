@@ -685,8 +685,8 @@ class Vs_Profile:
         ValueError
             When the length of ``precision`` is not 5
         """
-        if not isinstance(precision, list):
-            raise TypeError('precision must be a list.')
+        if not isinstance(precision, tuple):
+            raise TypeError('precision must be a tuple.')
 
         if len(precision) != 5:
             raise ValueError('Length of precision must be 5.')
